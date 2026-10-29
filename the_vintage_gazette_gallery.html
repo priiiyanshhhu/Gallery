@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Daily Curio & Gazette — Fine Art & Photography</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for Editorial / Vintage Look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Special+Elite&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        deepGreen: '#15370D',
+                        sageGreen: '#728E6D',
+                        parchment: '#E5CD82',
+                        creamPaper: '#FFF2B4',
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'Georgia', 'serif'],
+                        news: ['"Newsreader"', 'serif'],
+                        typewriter: ['"Special Elite"', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #FFF2B4;
+            color: #15370D;
+            font-family: 'Newsreader', serif;
+        }
+        .vintage-border {
+            border: 2px solid #15370D;
+        }
+        .vintage-border-sage {
+            border: 1px solid #728E6D;
+        }
+        .vintage-border-dashed {
+            border-bottom: 1px dashed #728E6D;
+        }
+        /* Custom scrollbar for gallery */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #E5CD82;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #728E6D;
+            border: 1px solid #15370D;
+        }
+        .masthead-divider {
+            border-top: 3px double #15370D;
+            border-bottom: 1px solid #15370D;
+        }
+        .newspaper-columns {
+            column-count: 3;
+            column-gap: 2rem;
+        }
+        @media (max-width: 768px) {
+            .newspaper-columns {
+                column-count: 1;
+            }
+        }
+        /* Sepia filter simulation for gallery images */
+        .vintage-img {
+            filter: sepia(35%) contrast(105%) brightness(95%);
+            transition: all 0.4s ease;
+        }
+        .vintage-img:hover {
+            filter: sepia(5%) contrast(110%) brightness(100%);
+        }
+    </style>
+</head>
+<body class="bg-creamPaper text-deepGreen min-h-screen selection:bg-parchment selection:text-deepGreen">
+
+    <!-- Top Ticker / Weather & Date bar -->
+    <div class="bg-deepGreen text-creamPaper px-4 py-1.5 text-xs font-typewriter flex flex-wrap justify-between items-center border-b border-parchment">
+        <div class="flex items-center space-x-4">
+            <span>VOL. CXXIV NO. 42</span>
+            <span class="hidden sm:inline">•</span>
+            <span class="hidden sm:inline">THE INDEPENDENT JOURNAL OF ART & OPTICS</span>
+        </div>
+        <div class="flex items-center space-x-4">
+            <span id="current-date">EDITION: AUTUMN SALON</span>
+            <span>•</span>
+            <span class="text-parchment">PRICE: THREE CENTS</span>
+        </div>
+    </div>
+
+    <!-- Main Wrapper -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- Masthead Header -->
+        <header class="text-center pb-4 mb-6 masthead-divider pt-2 bg-creamPaper">
+            <div class="text-xs uppercase tracking-widest font-typewriter text-sageGreen mb-1">Established MDCCCLXXXVIII — Published Weekly in Paris & New York</div>
+            <h1 class="font-serif text-5xl sm:text-7xl lg:text-8xl font-black tracking-tight text-deepGreen uppercase my-2">
+                The Daily Curio
+            </h1>
+            <p class="font-news italic text-lg sm:text-xl text-sageGreen max-w-2xl mx-auto mb-3">
+                "An Illustrated Chronicle of Fine Photography, Modern Composition, and Timeless Curiosities"
+            </p>
+            <div class="flex justify-between items-center px-4 py-2 bg-parchment vintage-border text-sm font-typewriter">
+                <span>WEATHER: CLEAR & GOLDEN</span>
+                <span class="font-bold tracking-widest">SPECIAL GALLERY SUPPLEMENT</span>
+                <span>CURATOR: A. VANDERBILT</span>
+            </div>
+        </header>
+
+        <!-- Navigation Categories / Newspaper Section Tabs -->
+        <nav class="mb-8 bg-parchment p-2 vintage-border shadow-sm">
+            <div class="flex flex-wrap justify-center sm:justify-between items-center gap-2 text-sm font-typewriter uppercase">
+                <button onclick="filterGallery('all')" class="gallery-tab px-4 py-2 bg-deepGreen text-creamPaper font-bold transition-colors">
+                    I. All Works
+                </button>
+                <button onclick="filterGallery('portrait')" class="gallery-tab px-4 py-2 hover:bg-sageGreen hover:text-creamPaper text-deepGreen font-semibold transition-colors">
+                    II. Portraits & Studioportrets
+                </button>
+                <button onclick="filterGallery('architecture')" class="gallery-tab px-4 py-2 hover:bg-sageGreen hover:text-creamPaper text-deepGreen font-semibold transition-colors">
+                    III. Architecture & Form
+                </button>
+                <button onclick="filterGallery('landscape')" class="gallery-tab px-4 py-2 hover:bg-sageGreen hover:text-creamPaper text-deepGreen font-semibold transition-colors">
+                    IV. Landscapes & Ether
+                </button>
+                <button onclick="filterGallery('stilllife')" class="gallery-tab px-4 py-2 hover:bg-sageGreen hover:text-creamPaper text-deepGreen font-semibold transition-colors">
+                    V. Still Life & Objects
+                </button>
+            </div>
+        </nav>
+
+        <!-- Editorial Intro Section (Newspaper style columns) -->
+        <section class="mb-10 bg-parchment/40 p-6 vintage-border-sage">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 items-center">
+                <div class="lg:col-span-3">
+                    <h2 class="font-serif text-2xl sm:text-3xl font-bold mb-3 text-deepGreen">
+                        Editorial: The Revival of Analog Observation in the Age of Instantaneous Impression
+                    </h2>
+                    <div class="newspaper-columns text-sm sm:text-base font-news text-deepGreen/90">
+                        <p class="first-letter:text-5xl first-letter:font-serif first-letter:font-bold first-letter:float-left first-letter:mr-3 first-letter:text-deepGreen">
+                            In an era dictated by the fleeting flash and the digital phantom, our current exhibition seeks to anchor the discerning eye back to the tactile grain of silver halide and thoughtful framing. Each curated piece in this month's gallery is selected not merely for its subject, but for its adherence to the timeless grammar of light and shadow.
+                        </p>
+                        <p class="mt-2">
+                            Visitors are invited to inspect each frame as one might pore over broadsheets in a quiet parlor. Notice the delicate interplay of twilight across architectural masonry and the soulful gazes captured in natural north-facing studio light. 
+                        </p>
+                        <p class="mt-2">
+                            Browse the catalogue below, click upon any engraving or plate to examine its finer details in our optical viewer, and acquire prints certified by the Guild of Curators.
+                        </p>
+                    </div>
+                </div>
+                <div class="bg-parchment p-4 vintage-border flex flex-col justify-between text-center">
+                    <div class="text-xs font-typewriter uppercase text-sageGreen mb-1">Notice to Connoisseurs</div>
+                    <div class="font-serif font-bold text-lg mb-2">Exhibition Hours</div>
+                    <p class="text-sm font-news mb-4">Monday through Saturday<br>Ten o'clock ante meridiem until six o'clock post meridiem.</p>
+                    <div class="border-t border-deepGreen/30 pt-3">
+                        <span class="inline-block bg-deepGreen text-creamPaper px-3 py-1 text-xs font-typewriter uppercase">Admission: Complimentary</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Gallery Grid (Styled like newspaper photo plates) -->
+        <main class="mb-16">
+            <div class="flex justify-between items-end mb-6 border-b-2 border-deepGreen pb-2">
+                <h3 class="font-serif text-2xl sm:text-3xl font-bold tracking-wide uppercase">
+                    Exhibition Plates & Visual Catalog
+                </h3>
+                <span class="text-xs font-typewriter text-sageGreen uppercase" id="gallery-count">Showing 8 Plates</span>
+            </div>
+
+            <!-- Gallery Cards Grid -->
+            <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- Item 1 -->
+                <div class="gallery-item bg-parchment vintage-border p-3 flex flex-col justify-between shadow-sm hover:shadow-md transition-all group cursor-pointer" data-category="portrait" onclick="openModal('Plate I: The Scholar of Montmartre', '1894. Silver gelatin print capturing quiet contemplation in natural studio light.', 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=800&q=80', 'A. Dubois', 'Plate I')">
+                    <div>
+                        <div class="flex justify-between items-center text-xs font-typewriter text-sageGreen mb-2 pb-1 vintage-border-dashed">
+                            <span>PLATE I</span>
+                            <span>PORTRAIT</span>
+                        </div>
+                        <div class="overflow-hidden vintage-border bg-creamPaper relative aspect-[4/5]">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=800&q=80" 
+                                 onerror="this.src='https://placehold.co/800x1000/E5CD82/15370D?text=Plate+I';"
+                                 alt="Portrait" class="w-full h-full object-cover vintage-img group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute bottom-2 right-2 bg-deepGreen text-creamPaper text-[10px] font-typewriter px-1.5 py-0.5">FIG. 1</div>
+                        </div>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-deepGreen/20">
+                        <h4 class="font-serif font-bold text-base text-deepGreen group-hover:underline">The Scholar of Montmartre</h4>
+                        <p class="text-xs font-news italic text-sageGreen mt-0.5">By A. Dubois • Paris, 1894</p>
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="gallery-item bg-parchment vintage-border p-3 flex flex-col justify-between shadow-sm hover:shadow-md transition-all group cursor-pointer" data-category="architecture" onclick="openModal('Plate II: Cathedral of St. Germain', 'Study of Gothic buttresses and afternoon shadows upon ancient limestone.', 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80', 'H. Sterling', 'Plate II')">
+                    <div>
+                        <div class="flex justify-between items-center text-xs font-typewriter text-sageGreen mb-2 pb-1 vintage-border-dashed">
+                            <span>PLATE II</span>
+                            <span>ARCHITECTURE</span>
+                        </div>
+                        <div class="overflow-hidden vintage-border bg-creamPaper relative aspect-[4/5]">
+                            <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80" 
+                                 onerror="this.src='https://placehold.co/800x1000/E5CD82/15370D?text=Plate+II';"
+                                 alt="Architecture" class="w-full h-full object-cover vintage-img group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute bottom-2 right-2 bg-deepGreen text-creamPaper text-[10px] font-typewriter px-1.5 py-0.5">FIG. 2</div>
+                        </div>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-deepGreen/20">
+                        <h4 class="font-serif font-bold text-base text-deepGreen group-hover:underline">Cathedral of St. Germain</h4>
+                        <p class="text-xs font-news italic text-sageGreen mt-0.5">By H. Sterling • Rouen, 1902</p>
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="gallery-item bg-parchment vintage-border p-3 flex flex-col justify-between shadow-sm hover:shadow-md transition-all group cursor-pointer" data-category="landscape" onclick="openModal('Plate III: Mist over the Seine', 'Early morning vapors rising off the river near the Pont Neuf.', 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80', 'M. Laurent', 'Plate III')">
+                    <div>
+                        <div class="flex justify-between items-center text-xs font-typewriter text-sageGreen mb-2 pb-1 vintage-border-dashed">
+                            <span>PLATE III</span>
+                            <span>LANDSCAPE</span>
+                        </div>
+                        <div class="overflow-hidden vintage-border bg-creamPaper relative aspect-[4/5]">
+                            <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80" 
+                                 onerror="this.src='https://placehold.co/800x1000/E5CD82/15370D?text=Plate+III';"
+                                 alt="Landscape" class="w-full h-full object-cover vintage-img group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute bottom-2 right-2 bg-deepGreen text-creamPaper text-[10px] font-typewriter px-1.5 py-0.5">FIG. 3</div>
+                        </div>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-deepGreen/20">
+                        <h4 class="font-serif font-bold text-base text-deepGreen group-hover:underline">Mist over the Seine</h4>
+                        <p class="text-xs font-news italic text-sageGreen mt-0.5">By M. Laurent • Paris, 1889</p>
+                    </div>
+                </div>
+
+                <!-- Item 4 -->
+                <div class="gallery-item bg-parchment vintage-border p-3 flex flex-col justify-between shadow-sm hover:shadow-md transition-all group cursor-pointer" data-category="stilllife" onclick="openModal('Plate IV: Botanist’s Desk', 'Specimen jars, dried lavender, and brass optical instruments.', 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80', 'C. Thornwood', 'Plate IV')">
+                    <div>
+                        <div class="flex justify-between items-center text-xs font-typewriter text-sageGreen mb-2 pb-1 vintage-border-dashed">
+                            <span>PLATE IV</span>
+                            <span>STILL LIFE</span>
+                        </div>
+                        <div class="overflow-hidden vintage-border bg-creamPaper relative aspect-[4/5]">
+                            <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80" 
+                                 onerror="this.src='https://placehold.co/800x1000/E5CD82/15370D?text=Plate+IV';"
+                                 alt="Still Life" class="w-full h-full object-cover vintage-img group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute bottom-2 right-2 bg-deepGreen text-creamPaper text-[10px] font-typewriter px-1.5 py-0.5">FIG. 4</div>
+                        </div>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-deepGreen/20">
+                        <h4 class="font-serif font-bold text-base text-deepGreen group-hover:underline">The Botanist’s Desk</h4>
+                        <p class="text-xs font-news italic text-sageGreen mt-0.5">By C. Thornwood • London, 1910</p>
+                    </div>
+                </div>
+
+                <!-- Item 5 -->
+                <div class="gallery-item bg-parchment vintage-border p-3 flex flex-col justify-between shadow-sm hover:shadow-md transition-all group cursor-pointer" data-category="portrait" onclick="openModal('Plate V: The Artisan of Rue Cler', 'A craftsman inspecting forged iron hinges in workshop illumination.', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80', 'A. Dubois', 'Plate V')">
+                    <div>
+                        <div class="flex justify-between items-center text-xs font-typewriter text-sageGreen mb-2 pb-1 vintage-border-dashed">
+                            <span>PLATE V</span>
+                            <span>PORTRAIT</span>
+                        </div>
+                        <div class="overflow-hidden vintage-border bg-creamPaper relative aspect-[4/5]">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80" 
+                                 onerror="this.src='https://placehold.co/800x1000/E5CD82/15370D?text=Plate+V';"
+                                 alt="Portrait" class="w-full h-full object-cover vintage-img group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute bottom-2 right-2 bg-deepGreen text-creamPaper text-[10px] font-typewriter px-1.5 py-0.5">FIG. 5</div>
+                        </div>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-deepGreen/20">
+                        <h4 class="font-serif font-bold text-base text-deepGreen group-hover:underline">The Artisan of Rue Cler</h4>
+                        <p class="text-xs font-news italic text-sageGreen mt-0.5">By A. Dubois • Paris, 1896</p>
+                    </div>
+                </div>
+
+                <!-- Item 6 -->
+                <div class="gallery-item bg-parchment vintage-border p-3 flex flex-col justify-between shadow-sm hover:shadow-md transition-all group cursor-pointer" data-category="architecture" onclick="openModal('Plate VI: Grand Arcade Geometry', 'Iron framework and glass vaulting of the nineteenth-century arcade.', 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80', 'H. Sterling', 'Plate VI')">
+                    <div>
+                        <div class="flex justify-between items-center text-xs font-typewriter text-sageGreen mb-2 pb-1 vintage-border-dashed">
+                            <span>PLATE VI</span>
+                            <span>ARCHITECTURE</span>
+                        </div>
+                        <div class="overflow-hidden vintage-border bg-creamPaper relative aspect-[4/5]">
+                            <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80" 
+                                 onerror="this.src='https://placehold.co/800x1000/E5CD82/15370D?text=Plate+VI';"
+                                 alt="Architecture" class="w-full h-full object-cover vintage-img group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute bottom-2 right-2 bg-deepGreen text-creamPaper text-[10px] font-typewriter px-1.5 py-0.5">FIG. 6</div>
+                        </div>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-deepGreen/20">
+                        <h4 class="font-serif font-bold text-base text-deepGreen group-hover:underline">Grand Arcade Geometry</h4>
+                        <p class="text-xs font-news italic text-sageGreen mt-0.5">By H. Sterling • Brussels, 1905</p>
+                    </div>
+                </div>
+
+                <!-- Item 7 -->
+                <div class="gallery-item bg-parchment vintage-border p-3 flex flex-col justify-between shadow-sm hover:shadow-md transition-all group cursor-pointer" data-category="landscape" onclick="openModal('Plate VII: Highlands at Twilight', 'Rolling hills shrouded in heather and approaching evening mist.', 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80', 'M. Laurent', 'Plate VII')">
+                    <div>
+                        <div class="flex justify-between items-center text-xs font-typewriter text-sageGreen mb-2 pb-1 vintage-border-dashed">
+                            <span>PLATE VII</span>
+                            <span>LANDSCAPE</span>
+                        </div>
+                        <div class="overflow-hidden vintage-border bg-creamPaper relative aspect-[4/5]">
+                            <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80" 
+                                 onerror="this.src='https://placehold.co/800x1000/E5CD82/15370D?text=Plate+VII';"
+                                 alt="Landscape" class="w-full h-full object-cover vintage-img group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute bottom-2 right-2 bg-deepGreen text-creamPaper text-[10px] font-typewriter px-1.5 py-0.5">FIG. 7</div>
+                        </div>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-deepGreen/20">
+                        <h4 class="font-serif font-bold text-base text-deepGreen group-hover:underline">Highlands at Twilight</h4>
+                        <p class="text-xs font-news italic text-sageGreen mt-0.5">By M. Laurent • Scotland, 1892</p>
+                    </div>
+                </div>
+
+                <!-- Item 8 -->
+                <div class="gallery-item bg-parchment vintage-border p-3 flex flex-col justify-between shadow-sm hover:shadow-md transition-all group cursor-pointer" data-category="stilllife" onclick="openModal('Plate VIII: Volumes of Antiquity', 'Bound volumes of poetry and an antique brass reading lamp.', 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=800&q=80', 'C. Thornwood', 'Plate VIII')">
+                    <div>
+                        <div class="flex justify-between items-center text-xs font-typewriter text-sageGreen mb-2 pb-1 vintage-border-dashed">
+                            <span>PLATE VIII</span>
+                            <span>STILL LIFE</span>
+                        </div>
+                        <div class="overflow-hidden vintage-border bg-creamPaper relative aspect-[4/5]">
+                            <img src="https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=800&q=80" 
+                                 onerror="this.src='https://placehold.co/800x1000/E5CD82/15370D?text=Plate+VIII';"
+                                 alt="Still Life" class="w-full h-full object-cover vintage-img group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute bottom-2 right-2 bg-deepGreen text-creamPaper text-[10px] font-typewriter px-1.5 py-0.5">FIG. 8</div>
+                        </div>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-deepGreen/20">
+                        <h4 class="font-serif font-bold text-base text-deepGreen group-hover:underline">Volumes of Antiquity</h4>
+                        <p class="text-xs font-news italic text-sageGreen mt-0.5">By C. Thornwood • Oxford, 1908</p>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <!-- Secondary Feature Article / Gazette Section -->
+        <section class="mb-16 bg-parchment p-6 sm:p-8 vintage-border">
+            <div class="border-b-2 border-deepGreen pb-3 mb-6 flex flex-wrap justify-between items-center">
+                <h3 class="font-serif text-2xl font-bold uppercase">Special Dispatch: The Chemistry of Silver & Gum</h3>
+                <span class="text-xs font-typewriter bg-sageGreen text-creamPaper px-2 py-1">CRITIQUE & TECHNIQUE</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 font-news text-base leading-relaxed">
+                <div>
+                    <h4 class="font-serif font-bold text-lg mb-2 text-deepGreen">I. The Emulsion Process</h4>
+                    <p>Unlike the instantaneous impressions captured by modern handheld devices, the gum bichromate process demands hours of preparation. Paper is brushed by hand with a colloid laced with ammonium dichromate and sensitive pigments.</p>
+                </div>
+                <div>
+                    <h4 class="font-serif font-bold text-lg mb-2 text-deepGreen">II. Tonal Range & Permanence</h4>
+                    <p>The resulting plates possess a richness resembling charcoal drawings rather than mechanical photographs. Each print absorbs the personality of the artist's hand, ensuring no two plates in our collection are identical.</p>
+                </div>
+                <div>
+                    <h4 class="font-serif font-bold text-lg mb-2 text-deepGreen">III. Acquisition Inquiries</h4>
+                    <p>Patrons wishing to acquire limited edition photographic plates or arrange private viewings in our salon may dispatch inquiries to our secretary or visit our offices on Boulevard Saint-Germain.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter / Subscription Form -->
+        <section class="mb-12 bg-deepGreen text-creamPaper p-8 vintage-border text-center">
+            <h3 class="font-serif text-3xl font-bold mb-2">Subscribe to The Curio Broadside</h3>
+            <p class="font-news text-parchment max-w-xl mx-auto mb-6">
+                Receive monthly dispatches regarding upcoming exhibitions, monographs of newly discovered photographic plates, and invitations to vernissage receptions.
+            </p>
+            <form onsubmit="handleSubscribe(event)" class="flex flex-col sm:flex-row justify-center items-center gap-3 max-w-md mx-auto">
+                <input type="email" id="subscriber-email" required placeholder="Enter your electronic correspondence address..." 
+                       class="px-4 py-3 bg-creamPaper text-deepGreen font-news placeholder-deepGreen/60 w-full focus:outline-none vintage-border">
+                <button type="submit" class="bg-parchment text-deepGreen font-typewriter font-bold px-6 py-3 hover:bg-sageGreen hover:text-creamPaper transition-colors uppercase whitespace-nowrap vintage-border">
+                    Dispatch
+                </button>
+            </form>
+            <p id="subscribe-message" class="text-xs font-typewriter text-parchment mt-3 hidden"></p>
+        </section>
+
+        <!-- Footer -->
+        <footer class="pt-8 pb-12 border-t-2 border-deepGreen text-center font-typewriter text-xs text-deepGreen/80">
+            <div class="flex flex-wrap justify-center gap-6 mb-4 text-sm font-bold uppercase">
+                <a href="#gallery-grid" class="hover:text-sageGreen transition-colors">Gallery Plates</a>
+                <span>•</span>
+                <a href="#" onclick="openModal('About The Gazette', 'The Daily Curio & Gallery is dedicated to the preservation of classical composition, photographic heritage, and fine printmaking. Established in Paris and distributed internationally.', '', 'Editorial Board', 'Notice'); return false;" class="hover:text-sageGreen transition-colors">About Gazette</a>
+                <span>•</span>
+                <a href="#" onclick="openModal('Guild Rules', 'All plates exhibited are copyrighted under the international artistic conventions of MDCCCXCVIII. Reproduction without written consent of the Guild of Curators is strictly prohibited.', '', 'Legal Office', 'Notice'); return false;" class="hover:text-sageGreen transition-colors">Guild Rules</a>
+                <span>•</span>
+                <a href="#" onclick="openModal('Salon Contacts', 'Visit us at 42 Boulevard Saint-Germain, Paris or our New York bureau at 120 Broadway. Telephone inquiries through the operator.', '', 'Secretary', 'Contact'); return false;" class="hover:text-sageGreen transition-colors">Contact</a>
+            </div>
+            <p class="mb-2">© 1888–2026 THE DAILY CURIO & GALLERY. ALL RIGHTS RESERVED UNDER THE PARIS CONVENTION.</p>
+            <p class="text-sageGreen">PRINTED ON RECYCLED ACID-FREE PARCHMENT USING SOY-BASED DEEP FOREST INK.</p>
+        </footer>
+
+    </div>
+
+    <!-- Lightbox / Modal for Image Preview -->
+    <div id="image-modal" class="fixed inset-0 bg-deepGreen/80 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-parchment vintage-border max-w-3xl w-full p-6 relative shadow-2xl animate-fade-in">
+            <button onclick="closeModal()" class="absolute top-4 right-4 bg-deepGreen text-creamPaper w-8 h-8 font-typewriter font-bold flex items-center justify-center hover:bg-sageGreen transition-colors">
+                ✕
+            </button>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                <div class="bg-creamPaper vintage-border p-2 aspect-[4/5] flex items-center justify-center overflow-hidden">
+                    <img id="modal-img" src="" alt="Gallery Preview" class="w-full h-full object-cover vintage-img">
+                </div>
+                <div>
+                    <div class="text-xs font-typewriter text-sageGreen mb-1" id="modal-plate">PLATE X</div>
+                    <h3 id="modal-title" class="font-serif text-2xl font-bold text-deepGreen mb-2">Title</h3>
+                    <p id="modal-artist" class="text-sm font-news italic text-sageGreen mb-4">Artist Name</p>
+                    <p id="modal-desc" class="font-news text-deepGreen/90 text-sm mb-6 leading-relaxed">Description goes here...</p>
+                    <div class="flex gap-3">
+                        <button onclick="closeModal()" class="flex-1 bg-deepGreen text-creamPaper font-typewriter py-2.5 text-xs uppercase font-bold hover:bg-sageGreen transition-colors">
+                            Return to Gazette
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for Filtering and Modal Logic -->
+    <script>
+        // Set dynamic date in top bar
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('current-date').textContent = "EDITION: " + new Date().toLocaleDateString('en-US', options).toUpperCase();
+
+        // Filter Function
+        function filterGallery(category) {
+            const items = document.querySelectorAll('.gallery-item');
+            const tabs = document.querySelectorAll('.gallery-tab');
+            
+            // Update active tab styling
+            tabs.forEach(tab => {
+                tab.classList.remove('bg-deepGreen', 'text-creamPaper', 'font-bold');
+                tab.classList.add('hover:bg-sageGreen', 'hover:text-creamPaper', 'text-deepGreen');
+            });
+            event.target.classList.remove('hover:bg-sageGreen', 'hover:text-creamPaper', 'text-deepGreen');
+            event.target.classList.add('bg-deepGreen', 'text-creamPaper', 'font-bold');
+
+            let visibleCount = 0;
+            items.forEach(item => {
+                if (category === 'all' || item.getAttribute('data-category') === category) {
+                    item.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            document.getElementById('gallery-count').textContent = `Showing ${visibleCount} Plates`;
+        }
+
+        // Modal Functions
+        function openModal(title, desc, imgSrc, artist, plate) {
+            const modal = document.getElementById('image-modal');
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-desc').textContent = desc;
+            document.getElementById('modal-img').src = imgSrc || 'https://placehold.co/800x1000/E5CD82/15370D?text=Exhibition+Plate';
+            document.getElementById('modal-artist').textContent = `By ${artist}`;
+            document.getElementById('modal-plate').textContent = plate.toUpperCase();
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('image-modal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Close modal on outside click
+        document.getElementById('image-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Newsletter simulation
+        function handleSubscribe(e) {
+            e.preventDefault();
+            const emailInput = document.getElementById('subscriber-email');
+            const msg = document.getElementById('subscribe-message');
+            msg.textContent = `SUCCESS: Correspondence address '${emailInput.value}' has been registered in our subscriber ledger.`;
+            msg.classList.remove('hidden');
+            emailInput.value = '';
+            setTimeout(() => {
+                msg.classList.add('hidden');
+            }, 6000);
+        }
+    </script>
+</body>
+</html>
